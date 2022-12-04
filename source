@@ -1,0 +1,136 @@
+//
+//  main.cpp
+//  postFix
+//
+//  Created by Abdumannob Muydinov on 20/11/22.
+//
+
+#include <iostream>
+#include <array>
+using namespace std;
+#define MAX 100
+
+class Stack{
+public:
+    int top;
+
+    int size=MAX;
+    int *arr=new int[size];
+    Stack(){
+        top=0;
+    }
+    bool isEmpty(){
+        return (top==0);
+    }
+    bool isFull(){
+        return (top==size);
+    }
+    void push(int data){
+        //cout<<data<<endl;
+        if(!isFull()){
+            arr[top]=data;
+            top++;
+        }else{
+            cout<<"Data cannot be inputted when stack is full"<<endl;
+
+        }
+    }
+    int pop(){
+        if(!isEmpty()){
+            top--;
+        }
+        return arr[top];
+//        else{
+//            cout<<"Empty stack cannot be popped"<<endl;
+//
+//        }
+//       // return top--;
+    }
+    int topVal()
+    {
+        if(!isEmpty())
+            return arr[top-1];
+        else
+            return 0;
+    }
+    void display(){
+        if(!isEmpty()){
+            for(int i=top-1;i>=0;i--){
+                cout<<arr[i]<<endl;
+            }
+        }
+    }
+    void postFixCheck(string str){
+//        if(!isEmpty()) return -1;
+        int len=str.length();
+        push(int(str[0])-48);
+        for(int i=1;i<len;i++){
+                if(int(str[i])>47&&int(str[i])<58){
+                    
+                    push(int(str[i])-48);
+                }else{
+                    int secondValue=topVal();
+                    pop();
+                    int topValue=topVal();
+                    pop();
+                    switch (str[i]) {
+                        case '+':
+                            push(topValue+secondValue);
+                            break;
+                        case '-':
+                            push(topValue-secondValue);
+                            break;
+                        case '*':
+                            push(topValue*secondValue);
+                            break;
+                        case '/':
+                            push(double(topValue/secondValue));
+                            break;
+                    }
+                }
+        }
+        cout<<arr[0]<<endl;
+    }
+    void baseball(char ch[]){
+        push(int(ch[0]-48));
+        for(int i=1;i<5;i++){
+            if(isdigit(ch[i])){
+                push(int(ch[i]-48));
+            }else{
+                switch (ch[i]) {
+                    case '+':{
+                        push(pop()+pop());
+                        cout<<pop();
+                        break;}
+                    case 'D':{
+                        int newScore=2*pop();
+                        pop();
+                        push(newScore);
+                        break;}
+                    case 'C':{
+                        pop();
+                        break;}
+                }
+            }
+        }
+        int sum=0;
+        for(int j=0;j<5;j++){
+            sum=sum+pop();
+        }
+        cout<<sum<<endl;
+    }
+   
+};
+
+int main(int argc, const char * argv[]) {
+  //   insert code here...
+//    Stack s1;
+//    string problem;
+//    cout<<"Enter what you want to calculate using postfix"<<endl;
+//    cin>>problem;
+//    s1.postFixCheck(problem);
+    char ops[] = {'5','2','C','D','+'};
+    Stack s2;
+    s2.baseball(ops);
+    
+}
